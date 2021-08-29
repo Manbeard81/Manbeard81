@@ -1,0 +1,45 @@
+import random
+
+symbols = ['!','@','#','$','%','&']
+low_alpha = ['a','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','z']
+up_alpha = ['A','B','C','D','F','G','H','J','K','L','M','N','P','Q','R','S','T','V','W','X','Z']
+nums = ['1','3','4','5','6','7',]
+
+# function
+def val_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+        except ValueError:
+            print("Invalid Number, try again.")
+            continue
+
+        if value <= 5:
+            print("Must be greater than 5")
+            continue
+        else:
+            break
+    return value
+
+print("Welcome to the password generator!")
+	
+pwd_len = val_int("How many characters: ")	
+
+pwd = ""
+
+while len(pwd) < pwd_len:
+	i = random.randint(1,4)
+	if i == 1:
+		i = random.randint(0,5)
+		pwd = pwd + symbols[i]		
+	if i == 2:
+		i = random.randint(0,20)
+		pwd = pwd + low_alpha[i]		
+	if i == 3:
+		i = random.randint(0,20)
+		pwd = pwd + up_alpha[i]		
+	if i == 4:
+		i = random.randint(0,5)
+		pwd = pwd + nums[i]
+	
+print("Your new password is: " + pwd)
