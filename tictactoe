@@ -1,3 +1,5 @@
+import operator
+
 #----------------------------------------#
 #function to determine and declare winner
 
@@ -23,8 +25,6 @@ def game_stat():
         		elif game[0][2]== game[1][1] == game[2][0]:  # check diagonal R2L
             			if game[0][2] != 0:
                 			return(declare_win(0,2))
-    		else:
-        		return("No winner!")
         
 	print(winner())
 
@@ -85,15 +85,14 @@ def add_piece(board,row,col,player):
 # main game
 
 		
-game = [[0,1,0],[0,1,0],[0,0,0]]		
-player = 2
-turns = 8
+game = [[0,0,0],[0,0,0],[0,0,0]]		
+turns = 0
 newboard = False
 
 while turns < 9:
-	if player == 2:
+	if (turns % 2) == 0:
 		turns = turns + 1
-		player = 1
+		player = 2
 		print_board()
 		print() # line intentional left blank
 		while bool(newboard) == False: # until the players move is determined valid, this will remain false.
@@ -104,15 +103,17 @@ while turns < 9:
 			# we have to reduce their value by one in order to use the correct index [starts at zero]
 			print() # line intentional left blank
 			if bool(newboard) == True: # once a valid moves is processed, the game continues.
-				print_board()
-				if turns >= 5:
+				print()
+				newboard = False
+				if turns >= 2:
 					game_stat()
+				break
 			else:
 				print("Invalid move. Please try again!")
 				print()		
 	else:
-		turns = turns + 1
-		player = 2
+		turns = operator.add(turns, 1) # using a built-in for fun
+		player = 1
 		print_board()
 		print() # line intentional left blank
 		while bool(newboard) == False:
@@ -121,9 +122,11 @@ while turns < 9:
 			newboard = add_piece(game,int(move[0])-1, int(move[1])-1,player)
 			print() # line intentional left blank
 			if bool(newboard) == True:
-				print_board()
-				if turns >= 5:
+				newboard = False
+				print()
+				if turns >= 2:
 					game_stat()
+				break
 			else:
 				print("Invalid move. Please try again!")
 				print()			
