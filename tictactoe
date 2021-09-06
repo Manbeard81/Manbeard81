@@ -99,9 +99,9 @@ def ticTacToe():
                 print("Using the board above as a guide, select the grid for your next move.")
                 print(f"Player {player}[{symbol}], please make your move".format(player,symbol))
                 move = input(f'Enter the row and column | Ex) 1st row, 3rd col - type 1,3: ').split(",")
-                try:
-                    val = int(move[0]-1) and int(move[1]-1)
-                    val = (move[0]>=1 and move[0]<=3) and (move[1]>=1 and move[1]<=3) 
+                try: # test user input
+                    val = int(move[0]-1) and int(move[1]-1) # is an integer
+                    val = (move[0]>=1 and move[0]<=3) and (move[1]>=1 and move[1]<=3) # is between 1 and 3
                     break
                 except:
                     print("Invalid user entry provided, please try again!")
