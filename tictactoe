@@ -1,12 +1,36 @@
-#----------------------------------------#
-#function to determine and declare winner
+#--------------------------------------------------------------------------------------#
+
+# function to print board
+# using a nested loop, we iterate through the list of lists to determine what to print at a particular spot
+# for this game, Player 1 is always 'X' and Player 2 is always 'O'
+
+def print_board(game):
+    for x in range(0,3): # row
+        for y in range (0,3): # column
+            if (game[x][y]==0): # available spot
+                print(" ", end="")
+            elif (game[x][y]==1): # taken by Player 1[X]
+                print("X", end="")
+            elif (game[x][y]==2): # taken by Player 2[O]
+                print("O", end="")
+   
+            if y<2:
+                print(" | ", end="")
+            else:
+                print()
+        if x<2:
+            print("---------")
+    print() # just a spacer    
+
+
+# function to determine if it's a draw, a player won and declare the winner, or continue playing
 
 def game_stat(winCondition,game):
     win=False
     player=0
     # we check the three arrays inside game to see if all possible moves have been used
     if (0 not in game[0]) and (0 not in game[1]) and (0 not in game[2]):
-        return 3
+        return 3 # it's a draw!
     else:
         for i in range(0,3): # checks if each entry matches and is not 0.
             if (game[i][0] == game[i][1] == game[i][2]):   # check columns
@@ -23,39 +47,18 @@ def game_stat(winCondition,game):
                 player=game[0][2]
 
             if win==True and player != 0:
-                return player #winCondition 1 or 2
+                return player # winCondition 1 or 2
             else:
-                return 0
-                          			
-
-#function to print board
-#using a nested loop, we iterate through the list of lists to determine what to print at a particular spot
-#for this game, Player 1 is always 'X' and Player 2 is always 'O'
-
-def print_board(game):
-    for x in range(0,3):
-        for y in range (0,3):
-            if (game[x][y]==0):
-                print(" ", end="")
-            elif (game[x][y]==1):
-                print("X", end="")
-            elif (game[x][y]==2):
-                print("O", end="")
-                
-            if y<2:
-                print(" | ", end="")
-            else:
-                print()
-        if x<2:
-            print("---------")
-    print() # just a spacer           
+                return 0 # it's not over yet
+                          			       
 
             
 # function to update board
-# Validates an open spot, and returns an updated board 
-# Otherwise, it returns the existing board, which will be registered as an invalid move
+# validates an open spot, then returns an updated board OR
+# it returns the existing board, which will be registered as an invalid move (seats taken)
 
 def add_piece(game,row,col,player):
+
     copyBoard=[[0,0,0],[0,0,0],[0,0,0]]
     for x in range(0,3):
             for y in range(0,3):
@@ -66,8 +69,14 @@ def add_piece(game,row,col,player):
                 return copyBoard
     return copyBoard
 
-#------------------------------------------#
+  
+
+
+
+#------------------------------------------------------------------------------------#
+
 # main game
+
 def ticTacToe():
     game=[[0,0,0],[0,0,0],[0,0,0]]
     winCondition=0
@@ -86,11 +95,19 @@ def ticTacToe():
                 
         print(f"Turn: {turn}".format(turn))
         while validMove == False: # until the players move is determined valid, this will remain false.
-            print("Using the board above as a guide, select the grid for your next move.")
-            print(f"Player {player}[{symbol}], please make your move".format(player,symbol))
-            move = input(f'Enter the row and column | ex: row 1,3 col: ').split(",")
-            # we have to reduce their value by one in order to use the correct index [starts at zero]
+            while True:
+                print("Using the board above as a guide, select the grid for your next move.")
+                print(f"Player {player}[{symbol}], please make your move".format(player,symbol))
+                move = input(f'Enter the row and column | Ex) 1st row, 3rd col - type 1,3: ').split(",")
+                try:
+                    val = int(move[0]-1) and int(move[1]-1)
+                    val = (move[0]>=1 and move[0]<=3) and (move[1]>=1 and move[1]<=3) 
+                    break
+                except:
+                    print("Invalid user entry provided, please try again!")
+
             newboard = add_piece(game,int(move[0])-1, int(move[1])-1,player)
+            # we have to reduce their value by one in order to use the correct index [starts at zero]
             if (bool(game == newboard)==False):
                 validMove=True
                 game=add_piece(game,int(move[0])-1, int(move[1])-1,player)
@@ -111,8 +128,10 @@ def ticTacToe():
     #outside the while loop, because the game has ended
     if winCondition==1 or winCondition==2:
         print(f"Player {winCondition} wins!".format(winCondition))
+        print()
     else:
         print("Draw!") # winCondition==3 and all moves made
+        print()
     print_board(game)
         
 
