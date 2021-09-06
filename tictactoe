@@ -7,27 +7,27 @@ def game_stat():
 
 	def declare_win(x,y):
 		winner = True
-    		if game[x][y] == 1:
-        		return "Player 1 wins!"
-    		elif game[x][y] == 2:
-        		return "Player 2 wins!"
+    	if game[x][y] == 1:
+        	return "Player 1 wins!"
+    	elif game[x][y] == 2:
+        	return "Player 2 wins!"
         
 	def winner():
-    		for i in range(0,3): # checks if each entry matches and is not 0.
-        		if game[i][0] == game[i][1] == game[i][2]:   # check rows
-            			if game[i][0] != 0:
-                			return(declare_win(i,0))
-        		elif game[0][i] == game[1][i] == game[2][i]: # check columns
-            			if game[0][i] != 0:
-                			return(declare_win(0,i))
-        		elif game[0][0] == game[1][1] == game[2][2]: # check diagonal L2R
-            			if game[0][0] != 0:
-                			return(declare_win(0,0))
-        		elif game[0][2]== game[1][1] == game[2][0]:  # check diagonal R2L
-            			if game[0][2] != 0:
-                			return(declare_win(0,2))
-    		else:
-        		return("It's still anybody's game!")
+    	for i in range(0,3): # checks if each entry matches and is not 0.
+        	if game[i][0] == game[i][1] == game[i][2]:   # check rows
+            	if game[i][0] != 0:
+                	return(declare_win(i,0))
+        	elif game[0][i] == game[1][i] == game[2][i]: # check columns
+            	if game[0][i] != 0:
+                	return(declare_win(0,i))
+        	elif game[0][0] == game[1][1] == game[2][2]: # check diagonal L2R
+            	if game[0][0] != 0:
+                	return(declare_win(0,0))
+        	elif game[0][2]== game[1][1] == game[2][0]:  # check diagonal R2L
+            	if game[0][2] != 0:
+                	return(declare_win(0,2))
+    	else:
+        	return("It's still anybody's game!")
         
 	print(winner())
 
