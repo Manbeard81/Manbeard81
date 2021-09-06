@@ -50,7 +50,22 @@ def game_stat(winCondition,game):
             else:
                 return 0 # it's not over yet
                           			       
+# function to validate integer
 
+def val_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+        except ValueError:
+            print("Invalid entry provided [not an integer], please try again!")
+            continue
+
+        if value >=4:
+            print("Invalid entry provided [must be 1,2, or 3], please try again!")
+            continue
+        else:
+            break
+    return value
             
 # function to update board
 # validates an open spot, then returns an updated board OR
@@ -93,31 +108,23 @@ def ticTacToe():
                 
         print(f"Turn: {turn}".format(turn))
         while validMove == False: # until the players move is determined valid, this will remain false.
-            while True:
-                print("Using the board above as a guide, select the grid for your next move.")
-                print(f"Player {player} ['{symbol}'], you're up.".format(player,symbol))
-                move = input(f'Enter the row and column | Ex) 1st Row, 3rd Col = 1,3: ').split(",")
-                
-                try: # test user input
-                    val = int(move[0]) and int(move[1]) # is an integer
-                    break
-                except:
-                    print() # just a spacer
-                    print("Invalid user entry provided, not an integer!")
-                    print()
-
-            newboard = add_piece(game,int(move[0])-1, int(move[1])-1,player)
+            print("Using the board above as a guide, select the grid for your next move.")
+            print(f"Player {player} ['{symbol}'], you're up. Provide the coordinates you wish to select.".format(player,symbol))
+            print()
+            row = val_int("Please enter the Row (1-3): ")
+            col = val_int("Please enter the Column (1-3): ")
+            print("You have selected " + str(row) + "," + str(col) + " please wait.")
+            newboard = add_piece(game,int(row)-1, int(col)-1,player)
             # we have to reduce their value by one in order to use the correct index [starts at zero]
             if (bool(game == newboard)==False):
                 validMove=True
-                game=add_piece(game,int(move[0])-1, int(move[1])-1,player)
+                game=add_piece(game,int(row)-1, int(col)-1,player)
             else:
                 print() # just a spacer
                 print("Invalid move. Please try again!")
                 print()
                 print_board(game)
                 print()
-
 
         print() 
 	#increment the turn, and determine if it's a win/draw	
