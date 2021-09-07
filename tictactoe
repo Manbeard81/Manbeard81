@@ -50,7 +50,7 @@ def game_stat(winCondition,game):
             else:
                 return 0 # it's not over yet
                           			       
-# function to validate integer
+# function to validate input as integer and meets requirements
 
 def val_int(prompt):
     while True:
@@ -60,7 +60,7 @@ def val_int(prompt):
             print("Invalid entry provided [not an integer], please try again!")
             continue
 
-        if value >=4:
+        if value <= 0 or value >=4:
             print("Invalid entry provided [must be 1,2, or 3], please try again!")
             continue
         else:
@@ -68,8 +68,8 @@ def val_int(prompt):
     return value
             
 # function to update board
-# validates an open spot, then returns an updated board OR
-# it returns the existing board, which will be registered as an invalid move (seats taken)
+# validates an open spot, returns an updated board if available OR
+# it returns the current board, which will be registered as an invalid move (seats taken)
 
 def add_piece(game,row,col,player):
 
@@ -84,10 +84,9 @@ def add_piece(game,row,col,player):
     return copyBoard
 
 
-
 #------------------------------------------------------------------------------------#
 
-# main game
+# main game function
 
 def ticTacToe():
     game=[[0,0,0],[0,0,0],[0,0,0]]
@@ -127,7 +126,7 @@ def ticTacToe():
                 print()
 
         print() 
-	#increment the turn, and determine if it's a win/draw	
+	#increment the turn, and determine if it's a win after 4 turns (unlikely, but possible)	
         turn=turn+1
         if turn>=4:
             winCondition=game_stat(winCondition,game)
@@ -141,6 +140,7 @@ def ticTacToe():
         print()
     print_board(game)
         
+#------------------------------------------------------------------------------------#
 
 # we call the main game function after a welcome message
 
