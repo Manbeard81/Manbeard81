@@ -1,0 +1,151 @@
+#-----------------------------------------------------------------------------------------------------------#
+#--FUNCTIONS------------------------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------#
+
+#---PRINT BOARD---------------------------------------------------------------------------------------------#
+# function to print board using information in "game"
+# the variable "game" = [[0,0,0],[0,0,0],[0,0,0]] a list of lists.
+# lists use index, starting with 0. "game" is 0[0,1,2] 1[0,1,2] 2[0,1,2]
+# to get contents of: first entry of the second list - game[1][0], last entry of the last list - game[2][2]
+# FYI for this game, Player 1 is always 'X' and Player 2 is always 'O'
+
+def print_board(game):
+    for x in range(0,3): #rows
+        for y in range (0,3): #columns
+            if (game[x][y]==0): # available spot
+                print(" ", end="")
+            elif (game[x][y]==1): # taken by Player 1[X]
+                print("X", end="")
+            elif (game[x][y]==2): # taken by Player 2[O]
+                print("O", end="")
+   
+            if y<2:
+                print(" | ", end="")
+            else:
+                print()
+        if x<2:
+            print("---------")
+            
+
+#----UPDATE BOARD-------------------------------------------------------------------------------------------#
+# function to update board using various data
+# user provides row and column, game and player is also passed to this function.
+# the variable "copyBoard" is used to update "game" if the row,col selected is not taken.
+
+def add_piece(game,row,col,player):
+
+    copyBoard=[[0,0,0],[0,0,0],[0,0,0]]
+    for x in range(0,3):
+            for y in range(0,3):
+                copyBoard[x][y] = game[x][y]
+    if (copyBoard[row][col] == 0) and (player == 1 or player == 2): 
+        copyBoard[row][col] = player
+        return copyBoard
+    else:    
+        return copyBoard            
+  
+ #---VALIDATE INPUT-----------------------------------------------------------------------------------------# 
+# function to validate input as integer and meets requirements
+
+def val_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt)) # validate entry as integer
+        except ValueError:
+            print("Invalid entry provided [not an integer], please try again!")
+            continue
+
+        if value <= 0 or value >=4: # validate entry is 1, 2, or 3
+            print("Invalid entry provided [must be 1, 2, or 3], please try again!")
+            continue
+        else:
+            break
+    return value
+     
+#---GAME STATUS---------------------------------------------------------------------------------------------#    
+# function to determine if it's a draw, a player won and declare the winner, or continue playing
+
+def game_stat(winCondition,game):
+    win=False
+    player=0
+    for i in range(0,3): # variable condition win, i loops through 0,1,2
+        if (game[0][i] == game[1][i] == game[2][i]):    #X
+            win=True                                    #X   
+            player=game[0][i]                           #X   
+        elif (game[i][0] == game[i][1] == game[i][2]):  #O O O
+            win=True
+            player=game[i][0]
+    if (game[0][0] == game[1][1] == game[2][2]):  # diagonal win #X
+        win=True                                                   #X
+        player=game[0][0]                                            #X
+    elif (game[0][2]== game[1][1] == game[2][0]): # diagonal win     #O
+        win=True                                                   #O
+        player=game[0][2]                                        #O
+    if win==True and player != 0:
+        return player # winCondition 1 or 2    
+    elif (0 not in game[0]) and (0 not in game[1]) and (0 not in game[2]):
+        return 3 # it's a draw!
+    else:
+        return 0 # it's not over yet        
+        
+#-----------------------------------------------------------------------------------------------------------#
+#--MAIN CODE------------------------------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------#
+
+#--INITIAL VARIABLE SETUP-----------------------------------------------------------------------------------#
+game=[[0,0,0],[0,0,0],[0,0,0]]
+winCondition=0
+turn=0
+
+
+print("Welcome to...")
+print(" T| I |C \n", end="")
+print("---------")
+print(" T| A |C \n", end="")
+print("---------")
+print(" T| O |E \n", end="")
+print("Utilize the keyboard number pad to make the grid choice ")
+print(" that corresponds with the position you wish to take!\n")
+print("For example: the 'A' is in row 2, col 2\n")
+print("Player one will play as 'X' and Player two will play as 'O'.")
+#--GAME LOOP------------------------------------------------------------------------------------------------#
+while winCondition==0: # 0 = Game in progress 1 = Player 1 wins 2 = Player 2 wins 3 = Tie
+    player = turn%2+1
+    
+    if player==1:
+        symbol="X"
+    else:
+        symbol="O"
+            
+    validMove = False
+    print(f"Turn: {turn}\n".format(turn))
+    print_board(game)
+    
+    
+    while validMove == False: # Use a loop to press the player for a valid selection
+        print(f"Player {player} ['{symbol}'], you're up. Provide the coordinates you wish to select.".format(player,symbol))
+        row = val_int("Please enter the Row (1-3): ") # ask for and validate input
+        col = val_int("Please enter the Column (1-3): ")
+        
+        print("\nYou have selected " + str(row) + "," + str(col) + " please wait.")
+        newboard = add_piece(game,int(row)-1, int(col)-1,player) 
+        # when passing the row/col we reduce by 1 for index [starts at 0]
+        
+        if (bool(game == newboard)==False):
+            game=newboard
+            turn=turn+1
+            if turn>=4: # check game status 
+                winCondition=game_stat(winCondition,game)
+            validMove=True
+        else:
+            print("\nInvalid move. Please try again!\n")
+            print_board(game)
+#--GAME OVER------------------------------------------------------------------------------------------------#            
+if winCondition==1 or winCondition==2:
+    print(f"Player {winCondition} wins!".format(winCondition))
+    print()
+else:
+    print("Draw!") # winCondition==3 and all moves made
+    print()
+    print_board(game)
+#--THANKS FOR PLAYING---------------------------------------------------------------------------------------#   
