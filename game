@@ -5,8 +5,10 @@
 #---PRINT BOARD---------------------------------------------------------------------------------------------#
 # function to print board using information in "game"
 # the variable "game" = [[0,0,0],[0,0,0],[0,0,0]] a list of lists.
-# lists use index, starting with 0. "game" is 0[0,1,2] 1[0,1,2] 2[0,1,2]
-# to get contents of: first entry of the second list - game[1][0], last entry of the last list - game[2][2]
+# lists use index, starting with 0. "game" is LIST1 0[0,1,2], 
+#                                             LIST2 1[0,1,2], 
+#                                             LIST3 2[0,1,2]
+# Examples: The first entry of the LIST2 = game[1][0], last entry of LIST3 = game[2][2]
 # FYI for this game, Player 1 is always 'X' and Player 2 is always 'O'
 
 def print_board(game):
@@ -52,11 +54,11 @@ def val_int(prompt):
         try:
             value = int(input(prompt)) # validate entry as integer
         except ValueError:
-            print("Invalid entry provided [not an integer], please try again!")
+            print("\nInvalid entry provided [not an integer], please try again!")
             continue
 
         if value <= 0 or value >=4: # validate entry is 1, 2, or 3
-            print("Invalid entry provided [must be 1, 2, or 3], please try again!")
+            print("\nInvalid entry provided [must be 1, 2, or 3], please try again!")
             continue
         else:
             break
@@ -97,44 +99,43 @@ game=[[0,0,0],[0,0,0],[0,0,0]]
 winCondition=0
 turn=0
 
-
 print("Welcome to...")
-print(" T| I |C \n", end="")
+print("T | I | C \n", end="")
 print("---------")
-print(" T| A |C \n", end="")
+print("T | A | C \n", end="")
 print("---------")
-print(" T| O |E \n", end="")
-print("Utilize the keyboard number pad to make the grid choice ")
+print("T | O | E \n", end="")
+print("\nUtilize the keyboard number pad to make the grid choice ")
 print(" that corresponds with the position you wish to take!\n")
 print("For example: the 'A' is in row 2, col 2\n")
 print("Player one will play as 'X' and Player two will play as 'O'.")
 #--GAME LOOP------------------------------------------------------------------------------------------------#
-while winCondition==0: # 0 = Game in progress 1 = Player 1 wins 2 = Player 2 wins 3 = Tie
-    player = turn%2+1
-    
+while winCondition==0: # 0 = Game in progress, 1 = Player 1 wins, 2 = Player 2 wins, 3 = Tie
+    player = turn%2+1 # using the incremented variable turn, we can alternate between players 1 and 2.
+                      # % is Modulus, or the remainder of division. In other words Player = the remainder of Turn/2 + 1.
     if player==1:
         symbol="X"
     else:
         symbol="O"
             
     validMove = False
-    print(f"Turn: {turn}\n".format(turn))
+    print(f"\n----------------ROUND {turn+1}------------------".format(turn))
     print_board(game)
     
     
     while validMove == False: # Use a loop to press the player for a valid selection
-        print(f"Player {player} ['{symbol}'], you're up. Provide the coordinates you wish to select.".format(player,symbol))
+        print(f"\nPlayer {player} ['{symbol}'], you're up. Provide the coordinates you wish to select.".format(player,symbol))
         row = val_int("Please enter the Row (1-3): ") # ask for and validate input
         col = val_int("Please enter the Column (1-3): ")
         
-        print("\nYou have selected " + str(row) + "," + str(col) + " please wait.")
+        print(f"\nYou have selected {row},{col} please wait.".format(row,col))       
         newboard = add_piece(game,int(row)-1, int(col)-1,player) 
         # when passing the row/col we reduce by 1 for index [starts at 0]
         
         if (bool(game == newboard)==False):
             game=newboard
             turn=turn+1
-            if turn>=4: # check game status 
+            if turn>=2: # check game status 
                 winCondition=game_stat(winCondition,game)
             validMove=True
         else:
@@ -142,10 +143,10 @@ while winCondition==0: # 0 = Game in progress 1 = Player 1 wins 2 = Player 2 win
             print_board(game)
 #--GAME OVER------------------------------------------------------------------------------------------------#            
 if winCondition==1 or winCondition==2:
-    print(f"Player {winCondition} wins!".format(winCondition))
-    print()
+    print(f"Player {winCondition} wins!\n".format(winCondition))
+    print_board(game)
 else:
-    print("Draw!") # winCondition==3 and all moves made
-    print()
+    print("Draw!\n") # winCondition==3 and all moves made
     print_board(game)
 #--THANKS FOR PLAYING---------------------------------------------------------------------------------------#   
+quit
